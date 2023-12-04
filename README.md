@@ -39,3 +39,15 @@ match
 ### Part 2
 Sometimes with AoC, your first part helps you with the second part, sometimes it doesn't. In this case, it did not help
 so I basically had to start over. But the logic was mostly the same: Find '*', look for neighbours, count neighbours.
+
+## Day4
+
+### Part 1
+The problem is simple, so I decided that I wanted to experiment more with iterators. I don't quite get it yet, I did usage
+of filter and map, we'll see in the futur if I can get a better grasp of it. With all the unwrap() since it's not 
+"production code" it make it a bit hard to debug.
+
+### Part 2
+Ahhhhhh ownership, I struggle a bit with this one. I really tought I could iterate from 0 to the len of the vector and
+then use indexes to use the actual card and modify the next ones. If there is a way, I did not find it. I ended up using
+a second vector to store the number of copies.
