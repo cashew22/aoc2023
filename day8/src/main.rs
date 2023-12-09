@@ -7,7 +7,7 @@ fn main() {
     println!("Day8 part2: {}", solve_part2(input));
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 struct Node {
     left: String,
     right: String,
@@ -77,39 +77,41 @@ fn solve_part2(input: String) -> usize {
         }
     }
 
-    let mut step_count = 0;
-    let instruction_count = instructions.len();
-    let mut instruction_index = 0;
     let re = Regex::new(r"..Z").unwrap();
+    let mut ends = Vec::new();
 
-    loop {
-        for i in 0..current_nodes.len() {
-            let node = nodes.get(&current_nodes[i]).unwrap();
+    for current_nodes in current_nodes {
+        let mut step_count = 0;
+        let instruction_count = instructions.len();
+        let mut instruction_index = 0;
+        let mut current_node = current_nodes.to_string();
+        loop {
+            let node = nodes.get(&current_node).unwrap();
             if instructions[instruction_index] == 'L' {
-                current_nodes[i] = node.left.clone();
+                current_node = node.left.clone();
             } else {
-                current_nodes[i] = node.right.clone();
+                current_node = node.right.clone();
             }
-        }
+            step_count += 1;
+            instruction_index += 1;
+            if instruction_index == instruction_count {
+                instruction_index = 0;
+            }
 
-        step_count += 1;
-        instruction_index += 1;
-        if instruction_index == instruction_count {
-            instruction_index = 0;
-        }
-
-        let mut all_match = true;
-        for node in &current_nodes {
-            if !re.is_match(node).unwrap() {
-                all_match = false;
+            if re.is_match(&current_node).unwrap() {
+                ends.push(step_count);
                 break;
             }
         }
-
-        if all_match {
-            return step_count;
-        }
     }
+
+    // find the commun lcm of all the ends
+    let mut lcm = ends[0];
+    for i in 1..ends.len() {
+        lcm = num::integer::lcm(lcm, ends[i]);
+    }
+
+    lcm
 }
 
 #[cfg(test)]
